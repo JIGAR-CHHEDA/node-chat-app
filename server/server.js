@@ -13,11 +13,20 @@ var io = socketIO(server);
 io.on('connection', (socket) =>{
     console.log('New user connected')
 
-// socket.emit('newMessage' , {
-//     from:"jigar",
-//     text:"hiiiii",
-//     CreatedAt:123,
-// })
+
+socket.emit('newMessage' , {
+    from:'Admin',
+    text:'welcom to the chat app',
+    createdAt: new Date().getTime()
+});
+
+    socket.broadcast.emit("newMessage" , {
+        from: 'Admin' ,
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    })
+
+ 
 socket.on('createMessage' , (message) =>{
     console.log('createMessage' , message);
     io.emit('newMessage', {
@@ -25,12 +34,14 @@ socket.on('createMessage' , (message) =>{
         text:message.text, 
         createdAt:new Date().getTime()
     })
-})
+
+  
+});
 
     socket.on('disconnected' , () =>{
         console.log('user was disconnected')
     })
-} )
+});
 
 server.listen(port , () => {
     console.log(`App listening on port ${port} `);
